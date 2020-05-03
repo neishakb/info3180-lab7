@@ -5,12 +5,37 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
+import os
 from app import app
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
+from .forms import UploadForm
+from werkzeug.utils import secure_filename
 
 ###
 # Routing for your application.
 ###
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+
+    form = UploadForm()
+
+    if request.method == 'POST':
+        if form.validate_on_sumbit():
+            description = form.description.data 
+            photo = form.photo.data 
+
+            filename= secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            #possible flash message
+
+            return redirect(url_for('#'))
+
+
+
+    return app.static_send_file('uploadform.html')
 
 
 # Please create all new routes and view functions above this route.
@@ -27,6 +52,9 @@ def index(path):
     Also we will render the initial webpage and then let VueJS take control.
     """
     return render_template('index.html')
+    # return  app.static_send_file('index.html')
+
+
 
 
 # Here we define a function to collect form errors from Flask-WTF

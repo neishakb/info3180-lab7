@@ -12,6 +12,9 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/upload">UploadForm <span class="sr-only">(current)</span></router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -40,6 +43,42 @@ const Home = Vue.component('home', {
     }
 });
 
+//component I added
+const Upload_Form = Vue.component('uploadform', {
+    template:`
+
+    <div class = "forms">
+        <h2>{{ page_title }}</h2>
+    
+        
+    <form>
+      
+        <div class="form-group">
+            <label for ="description">Description</label>
+            <textarea rows="5" cols="50" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for ="photo">Photo</label>
+            <input type="file" name="photo" id="photo" class="form-control">
+        </div>
+
+        <div class="submit">
+            <button type="submit"  class="btn btn-primary">Submit</button>
+    
+        </div>
+    
+    </form>
+    </div>
+    
+    `, 
+    data: function(){
+        return {
+            page_title: 'Upload Form'
+        }
+    }
+});
+
 const NotFound = Vue.component('not-found', {
     template: `
     <div>
@@ -56,6 +95,10 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {path: "/", component: Home},
+
+        //path i added
+        {path: "/upload", component: Upload_Form},
+
         // Put other routes here
 
         // This is a catch all route in case none of the above matches
