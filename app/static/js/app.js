@@ -44,18 +44,18 @@ const Home = Vue.component('home', {
 });
 
 //component I added
-const Upload_Form = Vue.component('uploadform', {
+const Upload_Form = Vue.component('upload-form', {
     template:`
 
     <div class = "forms">
         <h2>{{ page_title }}</h2>
     
         
-    <form>
+    <form @submit.prevent="uploadPhoto" enctype="multipart/form-data" id="uploadForm">
       
         <div class="form-group">
             <label for ="description">Description</label>
-            <textarea rows="5" cols="50" class="form-control"></textarea>
+            <textarea rows="5" cols="50" class="form-control" name="description"></textarea>
         </div>
 
         <div class="form-group">
@@ -69,7 +69,7 @@ const Upload_Form = Vue.component('uploadform', {
         </div>
     
     </form>
-    </div>
+</div>
     
     `, 
     data: function(){
@@ -78,18 +78,35 @@ const Upload_Form = Vue.component('uploadform', {
         }
     },
 
-    created: function(){
+    methods: {
+        uploadPhoto:function(){
 
-        let self = this;
+            let uploadForm = document.getElementById('uploadForm');
+            let form_data = new FormData(uploadForm);
+            
+            console.log(form_data)
 
-        fetch('/api/uploads')
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(data){
-            console.log(data)
-            self.description=this.description
-        });
+            console.log(uploadForm)
+            fetch("/api/upload",{
+                method: 'POST',
+                body: form_data,
+                headers:{
+                    'X-CSRFToken': token
+                },
+                credentials: 'same-origin'
+
+            })
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(jsonResponse){
+                    //sumn
+                    console.log(jsonResponse);
+                })
+                .catch(function(error){
+                    console.log(error)
+                })
+        }
     }
 
 });
