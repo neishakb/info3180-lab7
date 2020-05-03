@@ -76,7 +76,22 @@ const Upload_Form = Vue.component('uploadform', {
         return {
             page_title: 'Upload Form'
         }
+    },
+
+    created: function(){
+
+        let self = this;
+
+        fetch('/api/uploads')
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data){
+            console.log(data)
+            self.description=this.description
+        });
     }
+
 });
 
 const NotFound = Vue.component('not-found', {

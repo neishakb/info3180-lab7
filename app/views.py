@@ -16,22 +16,30 @@ from werkzeug.utils import secure_filename
 ###
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/uploads', methods=['POST'])
 def upload():
 
     form = UploadForm()
 
-    if request.method == 'POST':
-        if form.validate_on_sumbit():
-            description = form.description.data 
-            photo = form.photo.data 
+    if request.method == 'POST' and form.validate_on_sumbit():
+        description = form.description.data 
+        photo = form.photo.data 
 
-            filename= secure_filename(photo.filename)
-            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename= secure_filename(photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        #possible flash message
 
-            #possible flash message
-
-            return redirect(url_for('#'))
+        return [{
+            "message": "File Upload Successful",
+            "filename": "gilename",
+            "description": "description"  
+        }]
+    else:
+        return [{
+            "errors": form_errors(form)
+        
+        }]
 
 
 
